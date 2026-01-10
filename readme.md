@@ -21,16 +21,21 @@ Công nghệ sử dụng:
 
 # Cách chạy ứng dụng
 
-# Backend:
-Yêu cầu : nodejs, python, pip
-Điều hướng tới thư mục frontend
-Tạo môi trường : python -m venv venv
-Kích hoạt môi trường ảo: venv\Scripts\activate (window) hoặc source venv/bin/activate (linux)
-Cài các gói cần thiết : pip install -r requirements.txt
-Khởi tạo server : python run.py
-(Tùy chọn) Khởi tạo seed để hiển thị dữ liệu mẫu : python seed.py
+## Backend:
+**Yêu cầu :** Python, pip
 
-# Frontend:
-Yêu cầu : nodejs
-Cài các gói cần thiết : npm i
-Khởi tạo ứng dụng : npm run dev
+**Các bước:**
+1. Điều hướng tới thư mục backend
+2. Tạo môi trường ảo : `python -m venv venv`
+3. Kích hoạt môi trường ảo: `venv\Scripts\activate` (Windows) hoặc `source venv/bin/activate` (Linux/Mac)
+4. Cài các gói cần thiết : `pip install -r requirements.txt`
+5. Khởi tạo server : `python run.py`
+6. (Tùy chọn) Khởi tạo seed để hiển thị dữ liệu mẫu : `python seed.py`
+
+## Frontend:
+**Yêu cầu :** Node.js, npm
+
+**Các bước:**
+1. Điều hướng tới thư mục frontend
+2. Cài các gói cần thiết : `npm install`
+3. Khởi tạo ứng dụng : `npm run dev`
