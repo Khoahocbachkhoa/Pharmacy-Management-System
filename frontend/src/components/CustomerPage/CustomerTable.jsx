@@ -1,3 +1,5 @@
+// Bảng danh sách các khách hàng
+
 import { useState } from "react";
 import styles from "./CustomerTable.module.css";
 
@@ -12,7 +14,6 @@ export default function CustomerTable({ customers }) {
 
   return (
     <>
-      {/* TABLE */}
       <table className={styles.table}>
         <thead>
           <tr>
@@ -43,7 +44,6 @@ export default function CustomerTable({ customers }) {
         </tbody>
       </table>
 
-      {/* PAGINATION */}
       <div className={styles.pagination}>
         <button
           className={styles.pageBtn}

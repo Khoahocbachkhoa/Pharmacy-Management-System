@@ -15,7 +15,7 @@ def create_app():
 
     # Cấu hình đường dẫn DB
     BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-    # Lưu ý: "../database.db" nghĩa là file db nằm ngang hàng với thư mục app
+
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///" + os.path.join(BASE_DIR, "../database.db")
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -44,7 +44,7 @@ def create_app():
     app.register_blueprint(invoice_bp)
     app.register_blueprint(report_bp)
 
-    # Tạo bảng trong Database nếu chưa có
+    # Tạo bảng trong Database
     with app.app_context():
         db.create_all()
 

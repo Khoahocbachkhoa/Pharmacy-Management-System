@@ -1,3 +1,5 @@
+// form thêm một hóa đơn mới
+
 import { useState, useEffect } from "react";
 import { createInvoiceApi } from "../../api/invoiceApi";
 import { getMedicineOptionsApi } from "../../api/medicineApi";
@@ -19,6 +21,7 @@ export default function AddInvoiceModal({ onClose, onSuccess }) {
     getCustomersApi().then(res => setCusOptions(res.data));
   }, []);
 
+  // Xử lý danh mục các thuốc mà khách mua thay đổi?
   const handleCartChange = (index, field, value) => {
     const newCart = [...cartItems];
 
@@ -67,7 +70,6 @@ export default function AddInvoiceModal({ onClose, onSuccess }) {
       <div className={`${styles.modalContent} ${styles.large}`}>
         <h2 className={styles.modalTitle}>Tạo hóa đơn</h2>
 
-        {/* CUSTOMER */}
         <div className={styles.formGroup}>
           <select
             className={styles.formSelect}
@@ -83,7 +85,6 @@ export default function AddInvoiceModal({ onClose, onSuccess }) {
           </select>
         </div>
 
-        {/* TABLE */}
         <table className={styles.invoiceTable}>
           <thead>
             <tr>
@@ -154,12 +155,10 @@ export default function AddInvoiceModal({ onClose, onSuccess }) {
           + Thêm dòng
         </button>
 
-        {/* TOTAL */}
         <div className={styles.total}>
           Tổng tiền: <strong>{total}</strong>
         </div>
 
-        {/* ACTIONS */}
         <div className={styles.modalActions}>
           <button
             className={`${styles.btn} ${styles["btn-secondary"]}`}
