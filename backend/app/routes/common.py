@@ -7,7 +7,7 @@ common_bp = Blueprint('common', __name__)
 
 # Đưa ra danh sách các loại thuốc
 @common_bp.route('/api/options/medicines', methods=['GET'])
-@jwt_required() # yêu cầu xác thực được người dùng để truy cập được route
+@jwt_required() # yêu cầu xác thực được người dùng để truy cập được  route
 def get_medicine_options():
     try:
         # Lấy tất cả các loại thuốc trong cửa hàng
