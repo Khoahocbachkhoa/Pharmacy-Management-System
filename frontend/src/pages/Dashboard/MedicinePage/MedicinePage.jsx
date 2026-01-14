@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 import { useState, useEffect, useCallback } from "react";
 import { getMedicineOptionsApi, getSupplierOptionsApi, getImportHistoryApi } from "../../../api/medicineApi";
 import styles from "./MedicinePage.module.css";
@@ -9,14 +8,14 @@ import SearchMedicineModal from "../../../components/MedicinePage/SearchMedicine
 import MedicineTable from "../../../components/MedicinePage/MedicineTable";
 
 export default function MedicinePage() {
-  // quản lý các form
+  // quản lý đóng mở các form
   const [modals, setModals] = useState({
     import: false,
     search: false,
     add: false
   });
 
-  // quản lý dữ liệu dùng chung
+  // dữ liệu hiển thị trong trang
   const [data, setData] = useState({
     history: [],      // Lịch sử nhập kho
     medOptions: [],   // Danh sách thuốc cho dropdown
@@ -33,9 +32,11 @@ export default function MedicinePage() {
         getMedicineOptionsApi(),
         getSupplierOptionsApi()
       ]);
+
+      // Cập nhật dữ liệu các loại thuốc và nhà cung cấp
       setData(prev => ({ ...prev, medOptions: medRes.data, supOptions: supRes.data }));
     } catch (error) {
-      console.error("Lỗi tải options:", error);
+      console.error("Lỗi fetchOption: ", error);
     }
   }, []);
 
@@ -45,12 +46,13 @@ export default function MedicinePage() {
       const res = await getImportHistoryApi(month, year);
       setData(prev => ({ ...prev, history: res.data }));
     } catch (error) {
-      console.error("Lỗi tải lịch sử:", error);
+      console.error("Lỗi loadHistory:", error);
     }
   }, []);
 
   // Load dữ liệu lần đầu khi tải trang
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchOptions();
     loadImportHistory();
   }, [fetchOptions, loadImportHistory]);
@@ -60,21 +62,22 @@ export default function MedicinePage() {
     setModals(prev => ({ ...prev, [modalName]: isOpen }));
   };
 
-  // Load lại dữ liệu khi người dùng có thao tác
+  // Khi user thao tác -> load lại dữ liệu
   const refreshData = () => {
     loadImportHistory();
     fetchOptions();      
   };
 
-  // Lọc lịch sử nhập theo tháng
+  // lọc ra danh sách nhập trong tháng
   const handleFilterThisMonth = () => {
     const today = new Date();
     loadImportHistory(today.getMonth() + 1, today.getFullYear());
+    // đưa về trang đầu
     setPagination(prev => ({ ...prev, page: 1 }));
-    alert(`Đã lọc danh sách tháng ${today.getMonth() + 1}/${today.getFullYear()}`);
+    alert(`Lọc theo tháng ${today.getMonth() + 1}/${today.getFullYear()}`);
   };
 
-  // Xử lý phân trang
+  // quản lý phân trang
   const indexOfLastRow = pagination.page * pagination.limit;
   const indexOfFirstRow = indexOfLastRow - pagination.limit;
   const currentRows = data.history.slice(indexOfFirstRow, indexOfLastRow);
@@ -98,7 +101,7 @@ export default function MedicinePage() {
             onClick={() => toggleModal('search', true)} 
             className={`${styles.btn} ${styles["btn-secondary"]}`}
           >
-            🔍 Tìm kiếm thuốc
+            Tìm kiếm thuốc
           </button>
           <button 
             onClick={() => toggleModal('add', true)} 

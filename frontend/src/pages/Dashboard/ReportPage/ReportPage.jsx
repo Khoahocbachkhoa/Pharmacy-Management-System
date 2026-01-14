@@ -8,17 +8,8 @@ import {
 
 import styles from "./ReportPage.module.css";
 
-// * Giả lập do thiếu data các tháng 1 -> 11
-// * Triển khai thực tế khá đơn giản, chỉ cần gọi api lấy dữ liệu từ các tháng trước là xong
-const FAKE_MONTHLY_SALES = [
-  120, 150, 180, 160, 210, 250, 300, 280, 240, 220, 200, 320,
-];
-
-const FAKE_MONTHLY_IMPORTS = [
-  80, 100, 130, 110, 150, 180, 210, 200, 170, 160, 140, 230,
-];
-
 export default function ReportPage() {
+  // dữ liệu hiển thị
   const [totalSales, setTotalSales] = useState(0);
   const [invoiceCount, setInvoiceCount] = useState(0);
   const [topCustomers, setTopCustomers] = useState([]);
@@ -26,7 +17,7 @@ export default function ReportPage() {
   const [slowMedicines, setSlowMedicines] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch dữ liệu để hiển thị toàn bộ trang
+  // fetch data
   useEffect(() => {
     const fetchReportData = async () => {
       try {
@@ -57,15 +48,6 @@ export default function ReportPage() {
     return <p className={styles.loading}>Đang tải dữ liệu báo cáo...</p>;
   }
 
-  const maxValue = Math.max(...FAKE_MONTHLY_SALES, ...FAKE_MONTHLY_IMPORTS);
-
-  const chartData = FAKE_MONTHLY_SALES.map((sale, i) => ({
-    sale,
-    import: FAKE_MONTHLY_IMPORTS[i],
-    salePercent: Math.round((sale / maxValue) * 100),
-    importPercent: Math.round((FAKE_MONTHLY_IMPORTS[i] / maxValue) * 100),
-  }));
-
   return (
     <div className={styles.page}>
       <h1 className={styles.title}>Thống kê</h1>
@@ -82,34 +64,6 @@ export default function ReportPage() {
         <div className={styles.card}>
           <p className={styles.cardLabel}>Số hóa đơn tháng này</p>
           <h2 className={styles.cardValue}>{invoiceCount}</h2>
-        </div>
-      </div>
-
-      <div className={styles.chartCard}>
-        <h3>Doanh thu & Giá nhập qua các tháng (Triệu VNĐ)</h3>
-
-        <div className={styles.simpleChart}>
-          {chartData.map((item, i) => (
-            <div key={i} className={styles.colWrapper}>
-              <div className={styles.barGroup}>
-                {/* Cột giá nhập  */}
-                <div
-                  className={`${styles.bar} ${styles.importBar}`}
-                  style={{ height: `${item.importPercent}%` }}
-                  title={`Giá nhập: ${item.import} triệu`}
-                />
-
-                {/* Cột doanh thu */}
-                <div
-                  className={`${styles.bar} ${styles.saleBar}`}
-                  style={{ height: `${item.salePercent}%` }}
-                  title={`Doanh thu: ${item.sale} triệu`}
-                />
-              </div>
-
-              <span className={styles.barLabel}>T{i + 1}</span>
-            </div>
-          ))}
         </div>
       </div>
 

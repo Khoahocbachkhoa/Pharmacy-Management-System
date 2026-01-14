@@ -68,9 +68,6 @@
   background-color: #f3f4f6;
 }
 
-/* ===============================
-   Modal
-================================ */
 .modalOverlay {
   position: fixed;
   inset: 0;
@@ -114,9 +111,6 @@
   color: #111827;
 }
 
-/* ===============================
-   Forms
-================================ */
 .formGroup {
   display: flex;
   flex-direction: column;
@@ -154,18 +148,12 @@
   gap: 10px;
 }
 
-/* ===============================
-   Search Box
-================================ */
 .searchBox {
   display: flex;
   gap: 10px;
   margin-bottom: 18px;
 }
 
-/* ===============================
-   Table Controls
-================================ */
 .tableControls {
   display: flex;
   justify-content: flex-end;
@@ -182,9 +170,6 @@
   border: 1px solid #d1d5db;
 }
 
-/* ===============================
-   Table
-================================ */
 .medicineTable {
   width: 100%;
   border-collapse: collapse;
@@ -222,9 +207,6 @@
   font-style: italic;
 }
 
-/* ===============================
-   Status
-================================ */
 .text-success {
   color: #15803d;
   font-weight: 500;
@@ -235,9 +217,6 @@
   font-weight: 500;
 }
 
-/* ===============================
-   Pagination
-================================ */
 .paginationFooter {
   display: flex;
   justify-content: space-between;

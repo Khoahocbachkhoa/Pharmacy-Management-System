@@ -39,7 +39,7 @@ function LoginPage() {
         <h2 className={styles.loginTitle}>Đăng nhập</h2>
 
         <form className={styles.form}>
-          {/* USERNAME */}
+          {/* username */}
           <div className={styles.inputGroup}>
             <label className={styles.inputLabel}>Tên đăng nhập</label>
             <div className={styles.inputField}>
@@ -54,7 +54,7 @@ function LoginPage() {
             </div>
           </div>
 
-          {/* PASSWORD */}
+          {/* pass */}
           <div className={styles.inputGroup}>
             <label className={styles.inputLabel}>Mật khẩu</label>
             <div className={styles.inputField}>
@@ -69,7 +69,7 @@ function LoginPage() {
             </div>
           </div>
 
-          {/* ERROR */}
+          {/* err */}
           {error && (
             <div style={{ color: "red", fontSize: 12 }}>
               {error}

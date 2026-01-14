@@ -8,9 +8,12 @@ import InvoiceTable from "../../../components/InvoicePage/InvoiceTable";
 import styles from "./InvoicePage.module.css";
 
 export default function InvoicePage() {
+  // quản lý danh sách hóa đơn
   const [invoices, setInvoices] = useState([]);
-  const [filterType, setFilterType] = useState("all"); // quản lý lọc hóa đơn
-  const [searchQuery, setSearchQuery] = useState(""); // quản lý trạng thái tìm kiếm
+  // lọc tất cả hoặc trong tháng, năm, ngày
+  const [filterType, setFilterType] = useState("all");
+  // lọc theo khách hàng hoặc tên hóa đơn?
+  const [searchQuery, setSearchQuery] = useState("");
 
   const [showAddForm, setShowAddForm] = useState(false);
   const [showSearchForm, setShowSearchForm] = useState(false);
@@ -25,6 +28,7 @@ export default function InvoicePage() {
     setShowSearchForm(false);  // đóng modal
   };
 
+  // fetch data hóa đơn khi vừa tải trang
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     loadInvoices();
@@ -34,7 +38,7 @@ export default function InvoicePage() {
     <div className={styles.invoiceContainer}>
       <h2 className={styles.pageTitle}>Quản lý Hóa đơn</h2>
 
-      {/* ACTION BAR */}
+      {/* action bar */}
       <div className={styles.actionBar}>
         <div className={styles.actionGroup}>
           <button
