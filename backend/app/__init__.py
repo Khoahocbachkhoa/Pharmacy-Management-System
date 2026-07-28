@@ -13,21 +13,15 @@ def create_app():
     app = Flask(__name__)
     CORS(app)
 
-    # Cấu hình đường dẫn DB
     BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///" + os.path.join(BASE_DIR, "../database.db")
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-    # Cấu hình JWT
     app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
 
-    # Khởi tạo DB với App
     db.init_app(app)
-    # Khởi tạo JWT
     jwt.init_app(app)
 
-    # Đăng ký các Routes (Blueprint)
     from app.routes.login import login_bp
     from app.routes.common import common_bp
     from app.routes.import_stock import import_bp
@@ -44,7 +38,6 @@ def create_app():
     app.register_blueprint(invoice_bp)
     app.register_blueprint(report_bp)
 
-    # Tạo bảng trong Database
     with app.app_context():
         db.create_all()
 

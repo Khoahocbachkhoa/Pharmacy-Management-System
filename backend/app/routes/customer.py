@@ -4,7 +4,6 @@ from flask_jwt_extended import jwt_required
 
 customer_bp = Blueprint('customer', __name__)
 
-# Lấy danh sách các khách hàng phục vụ cho nhập hóa đơn
 @customer_bp.route('/api/customers', methods=['GET'])
 @jwt_required()
 def get_customers():
@@ -21,7 +20,6 @@ def get_customers():
     except Exception as e:
         return jsonify({"msg": str(e)}), 500
 
-# thêm 1 khách hàng mới
 @customer_bp.route('/api/customers', methods=['POST'])
 @jwt_required()
 def add_customer():
@@ -40,21 +38,17 @@ def add_customer():
         db.session.commit()
         return jsonify({"msg": "Thêm khách hàng thành công", "id": new_customer.CustomerID}), 201
     except Exception as e:
-        # Có lỗi thì rollback giao dịch!
         db.session.rollback()
         return jsonify({"msg": str(e)}), 500
 
-# Tìm kiếm khách hàng
 @customer_bp.route('/api/customers/search', methods=['GET'])
 @jwt_required()
 def search_customers():
     try:
-        # Lấy ra thông tin try vấn
         query_text = request.args.get('q', '').strip()
         if not query_text:
             return jsonify([]), 200
 
-        # Tìm theo tên hoặc số điện thoại của khách hàng
         customers = Customer.query.filter(
             (Customer.Name.ilike(f"%{query_text}%")) | 
             (Customer.Phone.ilike(f"%{query_text}%"))
@@ -66,7 +60,7 @@ def search_customers():
             "phone": c.Phone,
             "address": c.Address
         } for c in customers]
-        # Trả về nếu tìm thấy
+
         return jsonify(data), 200
     except Exception as e:
         return jsonify({"msg": str(e)}), 500

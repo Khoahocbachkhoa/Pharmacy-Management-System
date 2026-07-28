@@ -6,8 +6,6 @@ from flask_jwt_extended import jwt_required
 
 import_bp = Blueprint('import_stock', __name__)
 
-# Lưu và nhập kho thuốc
-# Để đơn giản -> Mỗi hóa đơn chỉ nhập 1 loại thuốc 
 @import_bp.route('/api/import-receipts', methods=['POST'])
 @jwt_required()
 def create_import_receipt():
@@ -21,14 +19,12 @@ def create_import_receipt():
         qty_raw = data.get('quantity')
         price_raw = data.get('price')
 
-        # Nếu thiếu trường dữ liệu
         if not all([supplier_id, medicine_id, qty_raw, price_raw]):
              return jsonify({"msg": "Vui lòng nhập đủ thông tin"}), 400
 
         quantity = int(qty_raw)
         import_price = float(price_raw)
 
-        # Tạo phiếu nhập
         total_cost = quantity * import_price
         
         new_receipt = ImportReceipt(
@@ -37,9 +33,8 @@ def create_import_receipt():
             TotalCost=total_cost
         )
         db.session.add(new_receipt)
-        db.session.flush() #Để giữ receiptID
+        db.session.flush()
 
-        # Tạo chi tiết phiếu (Để đơn giản thì mỗi phiếu nhập 1 thuốc!)
         new_detail = ImportDetail(
             ReceiptID=new_receipt.ReceiptID,
             MedicineID=medicine_id,
@@ -48,23 +43,19 @@ def create_import_receipt():
         )
         db.session.add(new_detail)
 
-        # Cập nhật kho thuốc
         medicine = Medicine.query.get(medicine_id)
         if medicine:
-            # Cộng vào tồn kho
             medicine.Quantity += quantity
         else:
-            # Nếu ID không hợp lệ
             db.session.rollback()
             return jsonify({"msg": "Không tìm thấy thuốc này trong hệ thống"}), 404
         
-        # commit transaction
         db.session.commit()
 
         return jsonify({
             "msg": "Nhập kho thành công!", 
             "receipt_id": new_receipt.ReceiptID,
-            "new_qty": medicine.Quantity # Trả về số lượng mới
+            "new_qty": medicine.Quantity
         }), 201
 
     except ValueError:
@@ -73,29 +64,24 @@ def create_import_receipt():
         db.session.rollback()
         return jsonify({"msg": "Lỗi hệ thống: " + str(e)}), 500
     
-# Lấy danh sách lịch sử nhập
 @import_bp.route('/api/import-receipts', methods=['GET'])
 @jwt_required()
 def get_import_history():
     try:
-        # Lấy tham số tháng và năm để lọc
         month = request.args.get('month', type=int)
         year = request.args.get('year', type=int)
 
-        # Lấy danh sách thuốc - ngày nhập - hãng - số lượng
         query = db.session.query(ImportDetail, ImportReceipt, Medicine, Supplier)\
             .join(ImportReceipt, ImportDetail.ReceiptID == ImportReceipt.ReceiptID)\
             .join(Medicine, ImportDetail.MedicineID == Medicine.MedicineID)\
             .join(Supplier, ImportReceipt.SupplierID == Supplier.SupplierID)
 
-        # Lọc theo tháng, năm
         if month and year:
             query = query.filter(
                 extract('month', ImportReceipt.DateImported) == month,
                 extract('year', ImportReceipt.DateImported) == year
             )
-        
-        # Sắp xếp theo ngày nhập
+
         results = query.order_by(ImportReceipt.DateImported.desc()).all()
 
         data = []

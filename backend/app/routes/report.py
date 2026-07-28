@@ -5,16 +5,13 @@ from flask_jwt_extended import jwt_required
 
 report_bp = Blueprint("report", __name__)
 
-# Lấy doanh thu trong tháng hiện tại
 @report_bp.route("/api/report/sales/", methods=["GET"])
 @jwt_required()
 def get_sales_by_month():
     try:
-        # Lấy tháng và năm cần truy vấn
         month = int(request.args.get("m"))
         year = int(request.args.get("y"))
 
-        # Truy vấn doanh thu theo tháng
         total = (
             db.session.query(func.sum(Invoice.TotalAmount))
             .filter(extract("month", Invoice.DateCreated) == month)
@@ -22,7 +19,6 @@ def get_sales_by_month():
             .scalar()
         )
 
-        # Trả về kết quả
         return jsonify({
             "month": month,
             "year": year,
@@ -31,8 +27,7 @@ def get_sales_by_month():
     
     except Exception as e:
         return jsonify({"msg": str(e)}), 400
-    
-# Lấy số hóa đơn trong tháng
+
 @report_bp.route("/api/report/invoices/", methods=["GET"])
 @jwt_required()
 def get_invoice_count_by_month():
@@ -40,7 +35,6 @@ def get_invoice_count_by_month():
         month = int(request.args.get("m"))
         year = int(request.args.get("y"))
 
-        # Truy vấn số hóa đơn trong tháng
         count = (
             db.session.query(func.count(Invoice.InvoiceID))
             .filter(extract("month", Invoice.DateCreated) == month)
@@ -57,7 +51,6 @@ def get_invoice_count_by_month():
     except Exception as e:
         return jsonify({"msg": str(e)}), 400
     
-# Lấy các khách mua nhiều trong tháng
 @report_bp.route("/api/report/customers/", methods=["GET"])
 @jwt_required()
 def get_top_customers():
@@ -65,8 +58,6 @@ def get_top_customers():
         month = int(request.args.get("m"))
         year = int(request.args.get("y"))
 
-        # Truy vấn các khách hàng mua nhiều hàng nhất
-        # Có thể phục vụ cho khuyến mãi, ... ?
         results = (
             db.session.query(
                 Customer.Name,
@@ -94,7 +85,6 @@ def get_top_customers():
     except Exception as e:
         return jsonify({"msg": str(e)}), 400
     
-# Lọc ra các loại thuốc bán chạy, bán ế phục vụ cho ra quyết định kinh doanh
 @report_bp.route("/api/report/medicines/", methods=["GET"])
 @jwt_required()
 def get_report_medicines():
@@ -114,10 +104,8 @@ def get_report_medicines():
             .group_by(Medicine.MedicineID)
         )
 
-        # Bán chạy
         bestSellers = query.order_by(func.sum(InvoiceDetail.Quantity).desc()).limit(3).all()
 
-        # Bán ế
         slowSellers = query.order_by(func.sum(InvoiceDetail.Quantity)).limit(3).all()
 
         return jsonify({

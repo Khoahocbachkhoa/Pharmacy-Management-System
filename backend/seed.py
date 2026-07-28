@@ -1,5 +1,3 @@
-# Thêm các loại thuốc, các nhà cung cấp vào cơ sở dữ liệu
-# Chạy 1 lần để khởi tạo cơ sở dữ liệu
 from app import create_app, db
 from app.models import Medicine, Supplier
 
@@ -7,10 +5,9 @@ app = create_app()
 
 with app.app_context():
     if Supplier.query.first():
-        # Không thêm nếu đã có seed
         print("Đã có seed!")
         exit()
-    # Thêm các nhà cung cấp mẫu
+
     suppliers = [
         Supplier(
             Name="Công ty Dược Bắc Ninh",
@@ -42,7 +39,6 @@ with app.app_context():
     db.session.add_all(suppliers)
     db.session.commit()
 
-    # Thêm các loại thuốc mẫu
     medicines = [
         Medicine(
             Name="Paracetamol 500mg",

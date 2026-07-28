@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import create_access_token
 
-# Chú ý : Phiên bản này là demo, ta chỉ tính duy nhất 1 role là admin
+# Demo: Only admin role
 login_bp = Blueprint("login", __name__)
 
 @login_bp.route("/login", methods=["POST"])
