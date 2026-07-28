@@ -18,10 +18,6 @@
     + quản lý khách hàng
     + thống kê báo cáo
 
-Công nghệ sử dụng:
-    FE: React + Vite
-    BE: Flask + SQLite + Sqlalchemy
-
 # Cách chạy ứng dụng
 
 ## Backend:
